@@ -26,9 +26,7 @@ int main() {
 			break;
 		case 2:
 			printf_s("Rectangle selected.\n");
-			int rectanglePoints[4][2] = {{0, 0}, {0,0}, {0,0}, {0,0}};
-
-
+			int rectangleSides[4][2] = {{0,0}, {0,0}, {0,0}, {0,0}};
 			break;
 		case 0:
 			continueProgram = false;
