@@ -34,9 +34,7 @@ int main() {
 			int rectangleSides[RECTANGLESIDES][RECTANGLEPOINTS] = {{0,0}, {0,0}, {0,0}, {0,0}};
 			//int* rectangleSidesPtr = getRectangleSides(rectangleSides);
 			getRectangleSides(rectangleSides);
-			printPoints(rectangleSides);
-		/*	printf("test %d\n", rectangleSides[0][0]);
-			printf("test2 %d\n", rectangleSides[1][0]);*/
+			//printPoints(rectangleSides);
 
 			analyzeQuadrilateral(rectangleSides[0], rectangleSides[1], rectangleSides[2], rectangleSides[3]);
 
