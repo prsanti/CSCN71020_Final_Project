@@ -5,6 +5,11 @@
 #include "triangleSolver.h"
 #include "rectangle.h"
 
+#define RECTANGLESIDES	4
+#define RECTANGLEPOINTS	2
+
+// CSCN71020 - Winter 24 - Group 2
+
 int side = 0;
 
 int main() {
@@ -26,7 +31,15 @@ int main() {
 			break;
 		case 2:
 			printf_s("Rectangle selected.\n");
-			int rectangleSides[4][2] = {{0,0}, {0,0}, {0,0}, {0,0}};
+			int rectangleSides[RECTANGLESIDES][RECTANGLEPOINTS] = {{0,0}, {0,0}, {0,0}, {0,0}};
+			//int* rectangleSidesPtr = getRectangleSides(rectangleSides);
+			getRectangleSides(rectangleSides);
+			printPoints(rectangleSides);
+		/*	printf("test %d\n", rectangleSides[0][0]);
+			printf("test2 %d\n", rectangleSides[1][0]);*/
+
+			analyzeQuadrilateral(rectangleSides[0], rectangleSides[1], rectangleSides[2], rectangleSides[3]);
+
 			break;
 		case 0:
 			continueProgram = false;
