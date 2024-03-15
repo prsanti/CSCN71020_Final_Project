@@ -32,6 +32,27 @@ void printPoints(int rectangleSides[RECTANGLESIDES][RECTANGLEPOINTS]) {
 	}
 }
 
+// fix this
+bool isQuadrilateralFlat(int point1[RECTANGLEPOINTS], int point2[RECTANGLEPOINTS], int point3[RECTANGLEPOINTS], int point4[RECTANGLEPOINTS]) {
+	bool areTwoXEqual = false;
+	bool areTwoYEqual = false;
+	bool isFlat = false;
+
+	if (point1[0] == point2[0] || point1[0] == point3[0] || point1[0] == point4[0]) {
+		areTwoXEqual = true;
+	}
+
+	if (point1[1] == point2[1] || point1[1] == point3[1] || point1[1] == point4[1]) {
+		areTwoYEqual = true;
+	}
+
+	if (areTwoXEqual && areTwoYEqual) {
+		isFlat = true;
+	}
+
+	return isFlat;
+}
+
 int findMinOfArray(int points[TOTALCOORDS]) {
 	int lowest = points[0];
 	for (int i = 0; i < TOTALCOORDS; i++) {
@@ -65,9 +86,14 @@ int findMaxOfArray(int points[TOTALCOORDS]) {
 
 /*
 	1) check if flat
-	2) check if right angle (90deg)
-	3)
+		a) if flat and coords are 2 x equal and 2 y equal then rectangle
+		b) define corners
+	2) define corners
+	3) check if right angle (90deg)
+		a) if all 90 then rectangle
+		b) else return perimeter
 */
+
 char* analyzeQuadrilateral(int point1[RECTANGLEPOINTS], int point2[RECTANGLEPOINTS], int point3[RECTANGLEPOINTS], int point4[RECTANGLEPOINTS]) {
 	printf("point 1: %d,%d\n", point1[0], point1[1]);
 	printf("point 2: %d,%d\n", point2[0], point2[1]);
@@ -82,6 +108,11 @@ char* analyzeQuadrilateral(int point1[RECTANGLEPOINTS], int point2[RECTANGLEPOIN
 
 	printf("lowest y: %d\n", findMinOfArray(yCoordinates));
 	printf("highest y: %d\n", findMaxOfArray(yCoordinates));
+
+	bool isFlat = false;
+
+	bool test = isQuadrilateralFlat(point1, point2, point3, point4);
+	printf("is flat? %d\n", test);
 
 
 
