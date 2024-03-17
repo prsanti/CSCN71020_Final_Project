@@ -49,18 +49,20 @@ typedef struct rectanglecorner {
 //
 //} FLATRECTANGLE;
 
-int* getRectangleSides(int rectangleSides[RECTANGLESIDES][RECTANGLEPOINTS]);
+float* getRectangleSides(float rectangleSides[RECTANGLESIDES][RECTANGLEPOINTS]);
 
-void printPoints(int rectangleSides[RECTANGLESIDES][RECTANGLEPOINTS]);
+void printPoints(float rectangleSides[RECTANGLESIDES][RECTANGLEPOINTS]);
 
-int findMinOfArray(int points[TOTALCOORDS]);
+float findMinOfArray(float points[TOTALCOORDS]);
 
-int findMaxOfArray(int points[TOTALCOORDS]);
+float findMaxOfArray(float points[TOTALCOORDS]);
 
-bool isQuadrilateralFlat(int point1[RECTANGLEPOINTS], int point2[RECTANGLEPOINTS], int point3[RECTANGLEPOINTS], int point4[RECTANGLEPOINTS]);
+bool isQuadrilateralFlat(float quadrilateralPoints[RECTANGLESIDES][RECTANGLEPOINTS]);
 
 //bool isRectangle(int xCoordinates[TOTALCOORDS], int yCoordinates[TOTALCOORDS]);
 
-int calculatePerimeter();
+float calculatePerimeter();
 
-char* analyzeQuadrilateral(int point1[RECTANGLEPOINTS], int point2[RECTANGLEPOINTS], int point3[RECTANGLEPOINTS], int point4[RECTANGLEPOINTS]);
+float calculateArea();
+
+char* analyzeQuadrilateral(float quadrilateralPoints[RECTANGLESIDES][RECTANGLEPOINTS]);
