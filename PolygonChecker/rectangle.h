@@ -9,46 +9,8 @@
 #define RECTANGLESIDES	4
 #define RECTANGLEPOINTS	2
 #define TOTALCOORDS		4
-
-//typedef enum flatcorner {
-//	BOTTOMLEFT,
-//	BOTTOMRIGHT,
-//	TOPLEFT,
-//	TOPRIGHT 
-//} FLATCORNER;
-//
-//typedef enum diagonalcorner {
-//	BOTTOM,
-//	TOP,
-//	LEFT,
-//	RIGHT
-//} DIAGONALCORNER;
-
-typedef enum corner {
-	// flat
-	BOTTOM,
-	TOP,
-	LEFT,
-	RIGHT,
-	// diagonal
-	BOTTOMLEFT,
-	BOTTOMRIGHT,
-	TOPLEFT,
-	TOPRIGHT
-} CORNER;
-
-typedef struct rectanglecorner {
-	CORNER type;
-	int point[2];
-} RECTANGLECORNER;
-
-//typedef struct flatrectangle {
-//	FLATCORNER corner[RECTANGLESIDES];
-//	struct {
-//		int point[2];
-//	};
-//
-//} FLATRECTANGLE;
+#define LENGTHS			4
+#define DIAGONALS		2
 
 float* getRectangleSides(float rectangleSides[RECTANGLESIDES][RECTANGLEPOINTS]);
 
@@ -65,12 +27,14 @@ float findMaxOfArray(float points[TOTALCOORDS]);
 
 bool isQuadrilateralFlat(float quadrilateralPoints[RECTANGLESIDES][RECTANGLEPOINTS]);
 
-//bool isRectangle(int xCoordinates[TOTALCOORDS], int yCoordinates[TOTALCOORDS]);
-
 float* findLengths(float quadrilateralPoints[RECTANGLESIDES][RECTANGLEPOINTS]);
 
-float calculatePerimeter();
+float* findDiagonals(float quadrilateralPoints[RECTANGLESIDES][RECTANGLEPOINTS]);
 
-float calculateArea();
+bool isRectangle(float lengths[RECTANGLESIDES]);
+
+float calculatePerimeter(float lengths[RECTANGLESIDES]);
+
+float calculateArea(float lengths[RECTANGLESIDES]);
 
 char* analyzeQuadrilateral(float quadrilateralPoints[RECTANGLESIDES][RECTANGLEPOINTS]);

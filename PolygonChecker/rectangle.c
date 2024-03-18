@@ -5,6 +5,7 @@
 
 // CSCN71020 - Winter 24 - Group 2
 
+// get input from user
 float* getRectangleSides(float rectangleSides[RECTANGLESIDES][RECTANGLEPOINTS]) {
 	printf_s("Enter the four points of the rectangle:\n");
 	for (int i = 0; i < RECTANGLESIDES; i++) {
@@ -24,6 +25,7 @@ float* getRectangleSides(float rectangleSides[RECTANGLESIDES][RECTANGLEPOINTS]) 
 	return *rectangleSides;
 }
 
+// print points of shape for testing
 void printPoints(float quadrilateralPoints[RECTANGLESIDES][RECTANGLEPOINTS]) {
 	for (int i = 0; i < RECTANGLESIDES; i++) {
 		printf("point %d: (%f, %f)\n", i+1, quadrilateralPoints[i][0], quadrilateralPoints[i][1]);
@@ -109,20 +111,6 @@ float* sortPoints(float quadrilateralPoints[RECTANGLESIDES][RECTANGLEPOINTS], bo
 	} // if quadrilateral is oriented horizontal/vertical
 	else {
 
-	}
-
-
-	// create temp array
-	float temp[RECTANGLEPOINTS];
-	// initialize x and y value to first element of input
-	//temp[0] = quadrilateralPoints[0][0];
-	//temp[1] = quadrilateralPoints[0][1];
-
-	for (int i = 0; i < RECTANGLESIDES; i++) {
-		float currentX = quadrilateralPoints[i][0];
-		float currentY = quadrilateralPoints[i][1];
-
-		//if (currentX)
 	}
 
 	return *quadrilateralPoints;
@@ -239,17 +227,13 @@ float findMaxOfArray(float points[TOTALCOORDS]) {
 }
 
 float* findLengths(float quadrilateralPoints[RECTANGLESIDES][RECTANGLEPOINTS]) {
-	float lengths[RECTANGLESIDES];
+	float lengths[LENGTHS];
 
 	// calculate length with pythagorean theorem
 	float side1 = pythagoreanTheorem(quadrilateralPoints[0], quadrilateralPoints[1]);
 	float side2 = pythagoreanTheorem(quadrilateralPoints[1], quadrilateralPoints[2]);
 	float side3 = pythagoreanTheorem(quadrilateralPoints[2], quadrilateralPoints[3]);
 	float side4 = pythagoreanTheorem(quadrilateralPoints[3], quadrilateralPoints[0]);
-
-	// calculate diagonals
-	float diagonal1 = pythagoreanTheorem(quadrilateralPoints[0], quadrilateralPoints[2]);
-	float diagonal2 = pythagoreanTheorem(quadrilateralPoints[1], quadrilateralPoints[3]);
 
 	lengths[0] = side1;
 	lengths[1] = side2;
@@ -259,8 +243,29 @@ float* findLengths(float quadrilateralPoints[RECTANGLESIDES][RECTANGLEPOINTS]) {
 	return lengths;
 }
 
-bool isRectangle() {
+float* findDiagonals(float quadrilateralPoints[RECTANGLESIDES][RECTANGLEPOINTS]) {
+	float diagonals[DIAGONALS];
 
+	// calculate diagonals
+	float diagonal1 = pythagoreanTheorem(quadrilateralPoints[0], quadrilateralPoints[2]);
+	float diagonal2 = pythagoreanTheorem(quadrilateralPoints[1], quadrilateralPoints[3]);
+
+	diagonals[0] = diagonal1;
+	diagonals[1] = diagonal2;
+
+	return diagonals;
+}
+
+bool isRectangle(float lengths[RECTANGLESIDES], float diagonals[RECTANGLEPOINTS]) {
+	bool rectangle = false;
+
+	if (lengths[0] == lengths[2] && lengths[1] == lengths[3] && diagonals[0] == diagonals[1]) {
+		rectangle = true;
+	}
+
+	printf("is rectangle %d\n", rectangle);
+
+	return rectangle;
 }
 
 float calculatePerimeter(float lengths[RECTANGLESIDES]) {
@@ -339,14 +344,33 @@ char* analyzeQuadrilateral(float quadrilateralPoints[RECTANGLESIDES][RECTANGLEPO
 	printPoints(quadrilateralPoints);
 
 	// find lengths of side of shape shape
-	float lengths[RECTANGLESIDES];
+	float lengths[LENGTHS];
 	lengths[0] = findLengths(quadrilateralPoints)[0];
 	lengths[1] = findLengths(quadrilateralPoints)[1];
 	lengths[2] = findLengths(quadrilateralPoints)[2];
 	lengths[3] = findLengths(quadrilateralPoints)[3];
 
-	printf("length 1 %f\n", lengths[0]);
-	printf("length 2 %f\n", lengths[1]);
-	printf("length 3 %f\n", lengths[2]);
-	printf("length 4 %f\n", lengths[3]);
+	float diagonals[DIAGONALS];
+	diagonals[0] = findDiagonals(quadrilateralPoints)[0];
+	diagonals[1] = findDiagonals(quadrilateralPoints)[1];
+
+	float area = 0;
+	float perimeter = 0;
+	float perimeter = calculatePerimeter(lengths);
+
+	if (isRectangle(lengths, diagonals)) {
+		printf("Shape is a rectangle\n");
+		printf("Perimeter is %f\n", perimeter);
+		area = calculateArea(lengths);
+		printf("Area is %f\n", area);
+	}
+	else {
+		printf("Shape is not a rectangle\n");
+		printf("Perimeter is %f\n", perimeter);
+	}
+
+	//printf("length 1 %f\n", lengths[0]);
+	//printf("length 2 %f\n", lengths[1]);
+	//printf("length 3 %f\n", lengths[2]);
+	//printf("length 4 %f\n", lengths[3]);
 } 
