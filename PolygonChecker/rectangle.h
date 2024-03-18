@@ -67,6 +67,8 @@ bool isQuadrilateralFlat(float quadrilateralPoints[RECTANGLESIDES][RECTANGLEPOIN
 
 //bool isRectangle(int xCoordinates[TOTALCOORDS], int yCoordinates[TOTALCOORDS]);
 
+float* findLengths(float quadrilateralPoints[RECTANGLESIDES][RECTANGLEPOINTS]);
+
 float calculatePerimeter();
 
 float calculateArea();

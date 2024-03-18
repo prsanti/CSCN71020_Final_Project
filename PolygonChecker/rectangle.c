@@ -48,10 +48,10 @@ float* sortPoints(float quadrilateralPoints[RECTANGLESIDES][RECTANGLEPOINTS], bo
 	float topLeft[RECTANGLEPOINTS];
 	
 	// order of corners if diagonal
-	float bottom[RECTANGLEPOINTS];
-	float right[RECTANGLEPOINTS];
-	float top[RECTANGLEPOINTS];
-	float left[RECTANGLEPOINTS];
+	float bottom[RECTANGLEPOINTS] = { 0,0 };
+	float right[RECTANGLEPOINTS] = { 0,0 };
+	float top[RECTANGLEPOINTS] = { 0,0 };
+	float left[RECTANGLEPOINTS] = { 0,0 };
 
 	// put x and y coords into an array
 	float xCoords[RECTANGLESIDES] = { quadrilateralPoints[0][0], quadrilateralPoints[1][0], quadrilateralPoints[2][0], quadrilateralPoints[3][0] };
@@ -68,6 +68,49 @@ float* sortPoints(float quadrilateralPoints[RECTANGLESIDES][RECTANGLEPOINTS], bo
 	printf("min y %f\n", minY);
 	printf("max y %f\n", maxY);
 
+	// if quadrilateral is oriented diagonally
+	if (!flat) {
+		for (int i = 0; i < RECTANGLESIDES; i++) {
+			float currentX = quadrilateralPoints[i][0];
+			float currentY = quadrilateralPoints[i][1];
+			printf("loop %d\n", i);
+			printf("currentX %f currentY %f\n", currentX, currentY);
+
+			// set min x to bottom coordinate
+			if (currentY == minY) {
+				bottom[0] = currentX;
+				bottom[1] = currentY;
+			}
+
+			if (currentY == maxY) {
+				top[0] = currentX;
+				top[1] = currentY;
+			}
+
+			if (currentX == minX) {
+				left[0] = currentX;
+				left[1] = currentY;
+			}
+
+			if (currentX == maxX) {
+				right[0] = currentX;
+				right[1] = currentY;
+			}
+		}
+			// set points to correct order for calculations
+			quadrilateralPoints[0][0] = bottom[0];
+			quadrilateralPoints[0][1] = bottom[1];
+			quadrilateralPoints[1][0] = right[0];
+			quadrilateralPoints[1][1] = right[1];
+			quadrilateralPoints[2][0] = top[0];
+			quadrilateralPoints[2][1] = top[1];
+			quadrilateralPoints[3][0] = left[0];
+			quadrilateralPoints[3][1] = left[1];
+	} // if quadrilateral is oriented horizontal/vertical
+	else {
+
+	}
+
 
 	// create temp array
 	float temp[RECTANGLEPOINTS];
@@ -82,15 +125,9 @@ float* sortPoints(float quadrilateralPoints[RECTANGLESIDES][RECTANGLEPOINTS], bo
 		//if (currentX)
 	}
 
-	// set first corner as bottom left
-	//quadrilateralPoints[0][0] = bottomLeft[0];
-	//quadrilateralPoints[0][1] = bottomLeft[1];
-
-
 	return *quadrilateralPoints;
 }
 
-// fix this
 bool isQuadrilateralFlat(float quadrilateralPoints[RECTANGLESIDES][RECTANGLEPOINTS]) {
 	bool isFlat = false;
 
@@ -145,6 +182,7 @@ bool isQuadrilateralFlat(float quadrilateralPoints[RECTANGLESIDES][RECTANGLEPOIN
 
 	}
 
+	// might be missing some types of rectangles and orientations
 	// flat (vertical/horizontal)
 	// rectangle
 	if (xCount1 == 2 && xCount2 == 2 && yCount1 == 2 && yCount2 == 2) {
@@ -178,6 +216,7 @@ bool isQuadrilateralFlat(float quadrilateralPoints[RECTANGLESIDES][RECTANGLEPOIN
 	return isFlat;
 }
 
+// find min num of array of 4 floats
 float findMinOfArray(float points[TOTALCOORDS]) {
 	float lowest = points[0];
 	for (int i = 0; i < TOTALCOORDS; i++) {
@@ -188,6 +227,7 @@ float findMinOfArray(float points[TOTALCOORDS]) {
 	return lowest;
 }
 
+// find max num of array of 4 floats
 float findMaxOfArray(float points[TOTALCOORDS]) {
 	float highest = points[0];
 	for (int i = 0; i < TOTALCOORDS; i++) {
@@ -196,6 +236,44 @@ float findMaxOfArray(float points[TOTALCOORDS]) {
 		}
 	}
 	return highest;
+}
+
+float* findLengths(float quadrilateralPoints[RECTANGLESIDES][RECTANGLEPOINTS]) {
+	float lengths[RECTANGLESIDES];
+
+	// calculate length with pythagorean theorem
+	float side1 = pythagoreanTheorem(quadrilateralPoints[0], quadrilateralPoints[1]);
+	float side2 = pythagoreanTheorem(quadrilateralPoints[1], quadrilateralPoints[2]);
+	float side3 = pythagoreanTheorem(quadrilateralPoints[2], quadrilateralPoints[3]);
+	float side4 = pythagoreanTheorem(quadrilateralPoints[3], quadrilateralPoints[0]);
+
+	// calculate diagonals
+	float diagonal1 = pythagoreanTheorem(quadrilateralPoints[0], quadrilateralPoints[2]);
+	float diagonal2 = pythagoreanTheorem(quadrilateralPoints[1], quadrilateralPoints[3]);
+
+	lengths[0] = side1;
+	lengths[1] = side2;
+	lengths[2] = side3;
+	lengths[3] = side4;
+
+	return lengths;
+}
+
+bool isRectangle() {
+
+}
+
+float calculatePerimeter(float lengths[RECTANGLESIDES]) {
+	float perimeter = 0;
+	for (int i = 0; i < RECTANGLESIDES; i++) {
+		perimeter += lengths[0];
+	}
+	return perimeter;
+}
+
+float calculateArea(float lengths[RECTANGLESIDES]) {
+	float area = lengths[0] * lengths[1];
+	return area;
 }
 
 // need to find each corner and define them
@@ -257,5 +335,18 @@ char* analyzeQuadrilateral(float quadrilateralPoints[RECTANGLESIDES][RECTANGLEPO
 	//}
 
 	bool isFlat = isQuadrilateralFlat(quadrilateralPoints);
-	sortPoints(quadrilateralPoints);
+	sortPoints(quadrilateralPoints, isFlat);
+	printPoints(quadrilateralPoints);
+
+	// find lengths of side of shape shape
+	float lengths[RECTANGLESIDES];
+	lengths[0] = findLengths(quadrilateralPoints)[0];
+	lengths[1] = findLengths(quadrilateralPoints)[1];
+	lengths[2] = findLengths(quadrilateralPoints)[2];
+	lengths[3] = findLengths(quadrilateralPoints)[3];
+
+	printf("length 1 %f\n", lengths[0]);
+	printf("length 2 %f\n", lengths[1]);
+	printf("length 3 %f\n", lengths[2]);
+	printf("length 4 %f\n", lengths[3]);
 } 
