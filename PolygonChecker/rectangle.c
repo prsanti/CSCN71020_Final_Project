@@ -41,141 +41,7 @@ float pythagoreanTheorem(float a[RECTANGLEPOINTS], float b[RECTANGLEPOINTS]) {
 	return c;
 }
 
-// sort 2D rectangle array into correct corners 
-float* sortPoints(float quadrilateralPoints[RECTANGLESIDES][RECTANGLEPOINTS], bool flat) {
-	// order of corners for flat quadrilateral
-	float bottomLeft[RECTANGLEPOINTS] = { 0, 0 };
-	float bottomRight[RECTANGLEPOINTS] = { 0, 0 };
-	float topRight[RECTANGLEPOINTS] = { 0, 0 };
-	float topLeft[RECTANGLEPOINTS] = { 0, 0 };
-	
-	// order of corners if diagonal
-	float bottom[RECTANGLEPOINTS] = { 0,0 };
-	float right[RECTANGLEPOINTS] = { 0,0 };
-	float top[RECTANGLEPOINTS] = { 0,0 };
-	float left[RECTANGLEPOINTS] = { 0,0 };
-
-	// put x and y coords into an array
-	float xCoords[RECTANGLESIDES] = { quadrilateralPoints[0][0], quadrilateralPoints[1][0], quadrilateralPoints[2][0], quadrilateralPoints[3][0] };
-	float yCoords[RECTANGLESIDES] = { quadrilateralPoints[0][1], quadrilateralPoints[1][1], quadrilateralPoints[2][1], quadrilateralPoints[3][1] };
-	// find min and max x
-	float minX = findMinOfArray(xCoords);
-	float maxX = findMaxOfArray(xCoords);
-	// find min and max y
-	float minY = findMinOfArray(yCoords);
-	float maxY = findMaxOfArray(yCoords);
-
-	bool isRectangleAndFlat = isRectangleFlat(quadrilateralPoints);
-
-	// if quadrilateral is oriented diagonally
-	if (!flat) {
-		for (int i = 0; i < RECTANGLESIDES; i++) {
-			float currentX = quadrilateralPoints[i][0];
-			float currentY = quadrilateralPoints[i][1];
-
-			// set bottom coordiante to min y
-			if (currentY == minY) {
-				bottom[0] = currentX;
-				bottom[1] = currentY;
-			}
-			// set top coordinate to max y value
-			if (currentY == maxY) {
-				top[0] = currentX;
-				top[1] = currentY;
-			}
-			// set left coordinate to min x
-			if (currentX == minX) {
-				left[0] = currentX;
-				left[1] = currentY;
-			}
-			// set right coordinate to max x
-			if (currentX == maxX) {
-				right[0] = currentX;
-				right[1] = currentY;
-			}
-		}
-
-		// set points to correct order for calculations
-		quadrilateralPoints[0][0] = bottom[0];
-		quadrilateralPoints[0][1] = bottom[1];
-		quadrilateralPoints[1][0] = right[0];
-		quadrilateralPoints[1][1] = right[1];
-		quadrilateralPoints[2][0] = top[0];
-		quadrilateralPoints[2][1] = top[1];
-		quadrilateralPoints[3][0] = left[0];
-		quadrilateralPoints[3][1] = left[1];
-	} // if quadrilateral is oriented horizontal/vertical
-	else if (isRectangleAndFlat) {
-		for (int i = 0; i < RECTANGLESIDES; i++) {
-			float currentX = quadrilateralPoints[i][0];
-			float currentY = quadrilateralPoints[i][1];
-
-			if (currentX == minX && currentY == minY) {
-				bottomLeft[0] = currentX;
-				bottomLeft[1] = currentY;
-			}
-			else if (currentX == maxX && currentY == maxY) {
-				topRight[0] = currentX;
-				topRight[1] = currentY;
-			}
-			else if (currentX == minX && currentY == maxY) {
-				topLeft[0] = currentX;
-				topLeft[1] = currentY;
-			}
-			else if (currentX == maxX && currentY == minY) {
-				bottomRight[0] = currentX;
-				bottomRight[1] = currentY;
-			}
-		}
-
-		// set points to correct order for calculations
-		quadrilateralPoints[0][0] = bottomLeft[0];
-		quadrilateralPoints[0][1] = bottomLeft[1];
-		quadrilateralPoints[1][0] = bottomRight[0];
-		quadrilateralPoints[1][1] = bottomRight[1];
-		quadrilateralPoints[2][0] = topRight[0];
-		quadrilateralPoints[2][1] = topRight[1];
-		quadrilateralPoints[3][0] = topLeft[0];
-		quadrilateralPoints[3][1] = topLeft[1];
-	} else {
-		for (int i = 0; i < RECTANGLESIDES; i++) {
-			float currentX = quadrilateralPoints[i][0];
-			float currentY = quadrilateralPoints[i][1];
-			// check if corner is 0 or empty and current x and y values are not 0
-			if (currentX != 0 && bottomLeft[0] == 0 && currentY != 0 && bottomLeft[1] == 0) {
-				// check for other types of quadrilaterals
-				// might need multiple checks for these
-				if (currentX == minX && currentY == minY || currentX >= minX && currentX < maxX && currentY >= minY && currentY < maxY) {
-					bottomLeft[0] = currentX;
-					bottomLeft[1] = currentY;
-				}
-			}
-			else if (currentX != 0 && bottomRight[0] == 0 && currentY != 0 && bottomRight[1] == 0) {
-				// ?
-				if (currentX == maxX && currentY == minY || currentX > minX && currentX <= maxX && currentY >= minY && currentY < maxY) {
-					bottomRight[0] = currentX;
-					bottomRight[1] = currentY;
-				}
-			}
-			else if (currentX == maxX && currentY == maxY || currentX != 0 && topRight[0] == 0 && currentY != 0 && topRight[1] == 0) {
-				if (currentX > minX && currentX <= maxX && currentY > minY && currentY <= maxY) {
-					topRight[0] = currentX;
-					topRight[1] = currentY;
-				}
-			}
-			else if (currentX != 0 && topLeft[0] == 0 && currentY != 0 && topLeft[1] == 0) {
-				if (currentX == minX && currentY == maxY || currentX >= minX && currentX < maxX && currentY > minY && currentY <= maxY) {
-					topLeft[0] = currentX;
-					topLeft[1] = currentY;
-				}
-			}
-		}
-	}
-
-	
-	return *quadrilateralPoints;
-}
-
+// check if quadrilateral is horizontal/vertical and not diagonal
 bool isQuadrilateralFlat(float quadrilateralPoints[RECTANGLESIDES][RECTANGLEPOINTS]) {
 	bool isFlat = false;
 
@@ -336,6 +202,7 @@ float findMaxOfArray(float points[TOTALCOORDS]) {
 	return highest;
 }
 
+// get lengths of shape with pythagorean theorem
 float* findLengths(float quadrilateralPoints[RECTANGLESIDES][RECTANGLEPOINTS]) {
 	float lengths[LENGTHS];
 
@@ -353,6 +220,9 @@ float* findLengths(float quadrilateralPoints[RECTANGLESIDES][RECTANGLEPOINTS]) {
 	return lengths;
 }
 
+// find diagonal lengths using pythagorean theorem
+// calculates from first corner to third corner
+// and from second corner to fourth corner
 float* findDiagonals(float quadrilateralPoints[RECTANGLESIDES][RECTANGLEPOINTS]) {
 	float diagonals[DIAGONALS];
 
@@ -366,18 +236,156 @@ float* findDiagonals(float quadrilateralPoints[RECTANGLESIDES][RECTANGLEPOINTS])
 	return diagonals;
 }
 
+// check if shape is a rectangle and not another type of quadrilateral
 bool isRectangle(float lengths[RECTANGLESIDES], float diagonals[RECTANGLEPOINTS]) {
 	bool rectangle = false;
 
+	// check if 2 lengths are equal and if both diagonals are equal
 	if (lengths[0] == lengths[2] && lengths[1] == lengths[3] && diagonals[0] == diagonals[1]) {
 		rectangle = true;
 	}
 
-	printf("is rectangle %d\n", rectangle);
-
 	return rectangle;
 }
 
+
+// sort 2D rectangle array into correct corners 
+float* sortPoints(float quadrilateralPoints[RECTANGLESIDES][RECTANGLEPOINTS], bool flat) {
+	// order of corners for flat quadrilateral
+	float bottomLeft[RECTANGLEPOINTS] = { 0, 0 };
+	float bottomRight[RECTANGLEPOINTS] = { 0, 0 };
+	float topRight[RECTANGLEPOINTS] = { 0, 0 };
+	float topLeft[RECTANGLEPOINTS] = { 0, 0 };
+
+	// order of corners if diagonal
+	float bottom[RECTANGLEPOINTS] = { 0,0 };
+	float right[RECTANGLEPOINTS] = { 0,0 };
+	float top[RECTANGLEPOINTS] = { 0,0 };
+	float left[RECTANGLEPOINTS] = { 0,0 };
+
+	// put x and y coords into an array
+	float xCoords[RECTANGLESIDES] = { quadrilateralPoints[0][0], quadrilateralPoints[1][0], quadrilateralPoints[2][0], quadrilateralPoints[3][0] };
+	float yCoords[RECTANGLESIDES] = { quadrilateralPoints[0][1], quadrilateralPoints[1][1], quadrilateralPoints[2][1], quadrilateralPoints[3][1] };
+	// find min and max x
+	float minX = findMinOfArray(xCoords);
+	float maxX = findMaxOfArray(xCoords);
+	// find min and max y
+	float minY = findMinOfArray(yCoords);
+	float maxY = findMaxOfArray(yCoords);
+
+	bool isRectangleAndFlat = isRectangleFlat(quadrilateralPoints);
+
+	// if quadrilateral is oriented diagonally
+	if (!flat) {
+		for (int i = 0; i < RECTANGLESIDES; i++) {
+			float currentX = quadrilateralPoints[i][0];
+			float currentY = quadrilateralPoints[i][1];
+
+			// set bottom coordiante to min y
+			if (currentY == minY) {
+				bottom[0] = currentX;
+				bottom[1] = currentY;
+			}
+			// set top coordinate to max y value
+			if (currentY == maxY) {
+				top[0] = currentX;
+				top[1] = currentY;
+			}
+			// set left coordinate to min x
+			if (currentX == minX) {
+				left[0] = currentX;
+				left[1] = currentY;
+			}
+			// set right coordinate to max x
+			if (currentX == maxX) {
+				right[0] = currentX;
+				right[1] = currentY;
+			}
+		}
+
+		// set points to correct order for calculations
+		quadrilateralPoints[0][0] = bottom[0];
+		quadrilateralPoints[0][1] = bottom[1];
+		quadrilateralPoints[1][0] = right[0];
+		quadrilateralPoints[1][1] = right[1];
+		quadrilateralPoints[2][0] = top[0];
+		quadrilateralPoints[2][1] = top[1];
+		quadrilateralPoints[3][0] = left[0];
+		quadrilateralPoints[3][1] = left[1];
+	} // if quadrilateral is oriented horizontal/vertical
+	else if (isRectangleAndFlat) {
+		for (int i = 0; i < RECTANGLESIDES; i++) {
+			float currentX = quadrilateralPoints[i][0];
+			float currentY = quadrilateralPoints[i][1];
+
+			if (currentX == minX && currentY == minY) {
+				bottomLeft[0] = currentX;
+				bottomLeft[1] = currentY;
+			}
+			else if (currentX == maxX && currentY == maxY) {
+				topRight[0] = currentX;
+				topRight[1] = currentY;
+			}
+			else if (currentX == minX && currentY == maxY) {
+				topLeft[0] = currentX;
+				topLeft[1] = currentY;
+			}
+			else if (currentX == maxX && currentY == minY) {
+				bottomRight[0] = currentX;
+				bottomRight[1] = currentY;
+			}
+		}
+
+		// set points to correct order for calculations
+		quadrilateralPoints[0][0] = bottomLeft[0];
+		quadrilateralPoints[0][1] = bottomLeft[1];
+		quadrilateralPoints[1][0] = bottomRight[0];
+		quadrilateralPoints[1][1] = bottomRight[1];
+		quadrilateralPoints[2][0] = topRight[0];
+		quadrilateralPoints[2][1] = topRight[1];
+		quadrilateralPoints[3][0] = topLeft[0];
+		quadrilateralPoints[3][1] = topLeft[1];
+	}
+	else {
+		for (int i = 0; i < RECTANGLESIDES; i++) {
+			float currentX = quadrilateralPoints[i][0];
+			float currentY = quadrilateralPoints[i][1];
+			// check if corner is 0 or empty and current x and y values are not 0
+			if (currentX != 0 && bottomLeft[0] == 0 && currentY != 0 && bottomLeft[1] == 0) {
+				// check for other types of quadrilaterals
+				// might need multiple checks for these
+				if (currentX == minX && currentY == minY || currentX >= minX && currentX < maxX && currentY >= minY && currentY < maxY) {
+					bottomLeft[0] = currentX;
+					bottomLeft[1] = currentY;
+				}
+			}
+			else if (currentX != 0 && bottomRight[0] == 0 && currentY != 0 && bottomRight[1] == 0) {
+				// ?
+				if (currentX == maxX && currentY == minY || currentX > minX && currentX <= maxX && currentY >= minY && currentY < maxY) {
+					bottomRight[0] = currentX;
+					bottomRight[1] = currentY;
+				}
+			}
+			else if (currentX == maxX && currentY == maxY || currentX != 0 && topRight[0] == 0 && currentY != 0 && topRight[1] == 0) {
+				if (currentX > minX && currentX <= maxX && currentY > minY && currentY <= maxY) {
+					topRight[0] = currentX;
+					topRight[1] = currentY;
+				}
+			}
+			else if (currentX != 0 && topLeft[0] == 0 && currentY != 0 && topLeft[1] == 0) {
+				if (currentX == minX && currentY == maxY || currentX >= minX && currentX < maxX && currentY > minY && currentY <= maxY) {
+					topLeft[0] = currentX;
+					topLeft[1] = currentY;
+				}
+			}
+		}
+	}
+
+
+	return *quadrilateralPoints;
+}
+
+// calculates perimeter of quadrilateral
 float calculatePerimeter(float lengths[RECTANGLESIDES]) {
 	float perimeter = 0;
 	for (int i = 0; i < RECTANGLESIDES; i++) {
@@ -386,12 +394,13 @@ float calculatePerimeter(float lengths[RECTANGLESIDES]) {
 	return perimeter;
 }
 
+// calculates area of rectangle
 float calculateArea(float lengths[RECTANGLESIDES]) {
 	float area = lengths[0] * lengths[1];
 	return area;
 }
 
-char* analyzeQuadrilateral(float quadrilateralPoints[RECTANGLESIDES][RECTANGLEPOINTS]) {
+void analyzeQuadrilateral(float quadrilateralPoints[RECTANGLESIDES][RECTANGLEPOINTS]) {
 	bool isFlat = isQuadrilateralFlat(quadrilateralPoints);
 	sortPoints(quadrilateralPoints, isFlat);
 

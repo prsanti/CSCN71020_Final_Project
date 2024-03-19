@@ -33,14 +33,12 @@ int main() {
 		case 2:
 			printf_s("Rectangle selected.\n");
 			float quadrilateralPoints[RECTANGLESIDES][RECTANGLEPOINTS] = {{0.0, 0.0}, {0.0, 0.0}, {0.0, 0.0}, {0.0, 0.0}};
-			//int* rectangleSidesPtr = getRectangleSides(rectangleSides);
 			// get input from user
 			getRectangleSides(quadrilateralPoints);
 			// testing purposes
-			printPoints(quadrilateralPoints);
+			//printPoints(quadrilateralPoints);
 
 			analyzeQuadrilateral(quadrilateralPoints);
-
 			break;
 		case 0:
 			continueProgram = false;
