@@ -44,10 +44,10 @@ float pythagoreanTheorem(float a[RECTANGLEPOINTS], float b[RECTANGLEPOINTS]) {
 // sort 2D rectangle array into correct corners 
 float* sortPoints(float quadrilateralPoints[RECTANGLESIDES][RECTANGLEPOINTS], bool flat) {
 	// order of corners for flat quadrilateral
-	float bottomLeft[RECTANGLEPOINTS];
-	float bottomRight[RECTANGLEPOINTS];
-	float topRight[RECTANGLEPOINTS];
-	float topLeft[RECTANGLEPOINTS];
+	float bottomLeft[RECTANGLEPOINTS] = { 0, 0 };
+	float bottomRight[RECTANGLEPOINTS] = { 0, 0 };
+	float topRight[RECTANGLEPOINTS] = { 0, 0 };
+	float topLeft[RECTANGLEPOINTS] = { 0, 0 };
 	
 	// order of corners if diagonal
 	float bottom[RECTANGLEPOINTS] = { 0,0 };
@@ -65,61 +65,120 @@ float* sortPoints(float quadrilateralPoints[RECTANGLESIDES][RECTANGLEPOINTS], bo
 	float minY = findMinOfArray(yCoords);
 	float maxY = findMaxOfArray(yCoords);
 
-	printf("min x %f\n", minX);
-	printf("max x %f\n", maxX);
-	printf("min y %f\n", minY);
-	printf("max y %f\n", maxY);
+	bool isRectangleAndFlat = isRectangleFlat(quadrilateralPoints);
 
 	// if quadrilateral is oriented diagonally
 	if (!flat) {
 		for (int i = 0; i < RECTANGLESIDES; i++) {
 			float currentX = quadrilateralPoints[i][0];
 			float currentY = quadrilateralPoints[i][1];
-			printf("loop %d\n", i);
-			printf("currentX %f currentY %f\n", currentX, currentY);
 
-			// set min x to bottom coordinate
+			// set bottom coordiante to min y
 			if (currentY == minY) {
 				bottom[0] = currentX;
 				bottom[1] = currentY;
 			}
-
+			// set top coordinate to max y value
 			if (currentY == maxY) {
 				top[0] = currentX;
 				top[1] = currentY;
 			}
-
+			// set left coordinate to min x
 			if (currentX == minX) {
 				left[0] = currentX;
 				left[1] = currentY;
 			}
-
+			// set right coordinate to max x
 			if (currentX == maxX) {
 				right[0] = currentX;
 				right[1] = currentY;
 			}
 		}
-			// set points to correct order for calculations
-			quadrilateralPoints[0][0] = bottom[0];
-			quadrilateralPoints[0][1] = bottom[1];
-			quadrilateralPoints[1][0] = right[0];
-			quadrilateralPoints[1][1] = right[1];
-			quadrilateralPoints[2][0] = top[0];
-			quadrilateralPoints[2][1] = top[1];
-			quadrilateralPoints[3][0] = left[0];
-			quadrilateralPoints[3][1] = left[1];
-	} // if quadrilateral is oriented horizontal/vertical
-	else {
 
+		// set points to correct order for calculations
+		quadrilateralPoints[0][0] = bottom[0];
+		quadrilateralPoints[0][1] = bottom[1];
+		quadrilateralPoints[1][0] = right[0];
+		quadrilateralPoints[1][1] = right[1];
+		quadrilateralPoints[2][0] = top[0];
+		quadrilateralPoints[2][1] = top[1];
+		quadrilateralPoints[3][0] = left[0];
+		quadrilateralPoints[3][1] = left[1];
+	} // if quadrilateral is oriented horizontal/vertical
+	else if (isRectangleAndFlat) {
+		for (int i = 0; i < RECTANGLESIDES; i++) {
+			float currentX = quadrilateralPoints[i][0];
+			float currentY = quadrilateralPoints[i][1];
+
+			if (currentX == minX && currentY == minY) {
+				bottomLeft[0] = currentX;
+				bottomLeft[1] = currentY;
+			}
+			else if (currentX == maxX && currentY == maxY) {
+				topRight[0] = currentX;
+				topRight[1] = currentY;
+			}
+			else if (currentX == minX && currentY == maxY) {
+				topLeft[0] = currentX;
+				topLeft[1] = currentY;
+			}
+			else if (currentX == maxX && currentY == minY) {
+				bottomRight[0] = currentX;
+				bottomRight[1] = currentY;
+			}
+		}
+
+		// set points to correct order for calculations
+		quadrilateralPoints[0][0] = bottomLeft[0];
+		quadrilateralPoints[0][1] = bottomLeft[1];
+		quadrilateralPoints[1][0] = bottomRight[0];
+		quadrilateralPoints[1][1] = bottomRight[1];
+		quadrilateralPoints[2][0] = topRight[0];
+		quadrilateralPoints[2][1] = topRight[1];
+		quadrilateralPoints[3][0] = topLeft[0];
+		quadrilateralPoints[3][1] = topLeft[1];
+	} else {
+		for (int i = 0; i < RECTANGLESIDES; i++) {
+			float currentX = quadrilateralPoints[i][0];
+			float currentY = quadrilateralPoints[i][1];
+			// check if corner is 0 or empty and current x and y values are not 0
+			if (currentX != 0 && bottomLeft[0] == 0 && currentY != 0 && bottomLeft[1] == 0) {
+				// check for other types of quadrilaterals
+				// might need multiple checks for these
+				if (currentX == minX && currentY == minY || currentX >= minX && currentX < maxX && currentY >= minY && currentY < maxY) {
+					bottomLeft[0] = currentX;
+					bottomLeft[1] = currentY;
+				}
+			}
+			else if (currentX != 0 && bottomRight[0] == 0 && currentY != 0 && bottomRight[1] == 0) {
+				// ?
+				if (currentX == maxX && currentY == minY || currentX > minX && currentX <= maxX && currentY >= minY && currentY < maxY) {
+					bottomRight[0] = currentX;
+					bottomRight[1] = currentY;
+				}
+			}
+			else if (currentX == maxX && currentY == maxY || currentX != 0 && topRight[0] == 0 && currentY != 0 && topRight[1] == 0) {
+				if (currentX > minX && currentX <= maxX && currentY > minY && currentY <= maxY) {
+					topRight[0] = currentX;
+					topRight[1] = currentY;
+				}
+			}
+			else if (currentX != 0 && topLeft[0] == 0 && currentY != 0 && topLeft[1] == 0) {
+				if (currentX == minX && currentY == maxY || currentX >= minX && currentX < maxX && currentY > minY && currentY <= maxY) {
+					topLeft[0] = currentX;
+					topLeft[1] = currentY;
+				}
+			}
+		}
 	}
 
+	
 	return *quadrilateralPoints;
 }
 
 bool isQuadrilateralFlat(float quadrilateralPoints[RECTANGLESIDES][RECTANGLEPOINTS]) {
 	bool isFlat = false;
 
-	//float xCoord1 = 0, xCoord2 = 0, yCoord1 = 0, yCoord2 = 0;
 	// set first x-coordinate to first x value
 	float xCoord1 = quadrilateralPoints[0][0];
 	// set first y-coordinate to first y value
@@ -189,17 +248,68 @@ bool isQuadrilateralFlat(float quadrilateralPoints[RECTANGLESIDES][RECTANGLEPOIN
 		isFlat = true;
 	}
 
-	printf("x coord 1 %f\n", xCoord1);
-	printf("x coord 2 %f\n", xCoord2);
-	printf("y coord 1 %f\n", yCoord1);
-	printf("y coord 2 %f\n", yCoord2);
+	return isFlat;
+}
 
-	printf("xcount1 %d\n", xCount1);
-	printf("xcount2 %d\n", xCount2);
-	printf("ycount1 %d\n", yCount1);
-	printf("ycount2 %d\n", yCount2);
+// for sorting algorithm
+// check if 2 x and 2 y values are the same
+bool isRectangleFlat(float quadrilateralPoints[RECTANGLESIDES][RECTANGLEPOINTS]) {
+	bool isFlat = false;
 
-	printf("isflat? %d\n", isFlat);
+	// set first x-coordinate to first x value
+	float xCoord1 = quadrilateralPoints[0][0];
+	// set first y-coordinate to first y value
+	float yCoord1 = quadrilateralPoints[0][1];
+
+	float xCoord2, yCoord2;
+
+	// set second x-coordinate to second different x value
+	if (quadrilateralPoints[1][0] != xCoord1) {
+		xCoord2 = quadrilateralPoints[1][0];
+	}
+	else {
+		xCoord2 = quadrilateralPoints[2][0];
+	}
+
+	// set second y-coordinate to second different x value
+	if (quadrilateralPoints[1][1] != yCoord1) {
+		yCoord2 = quadrilateralPoints[1][1];
+	}
+	else {
+		yCoord2 = quadrilateralPoints[2][1];
+	}
+
+	// keep count of x and y values
+	int xCount1 = 0;
+	int xCount2 = 0;
+	int yCount1 = 0;
+	int yCount2 = 0;
+
+	// set coords
+	for (int i = 0; i < RECTANGLESIDES; i++) {
+		float currentX = quadrilateralPoints[i][0];
+		float currentY = quadrilateralPoints[i][1];
+
+		if (currentX == xCoord1) {
+			xCount1++;
+		}
+		else if (currentX == xCoord2) {
+			xCount2++;
+		}
+
+		if (currentY == yCoord1) {
+			yCount1++;
+		}
+		else if (currentY == yCoord2) {
+			yCount2++;
+		}
+
+	}
+	// flat (vertical/horizontal)
+	// rectangle
+	if (xCount1 == 2 && xCount2 == 2 && yCount1 == 2 && yCount2 == 2) {
+		isFlat = true;
+	}
 
 	return isFlat;
 }
@@ -281,67 +391,9 @@ float calculateArea(float lengths[RECTANGLESIDES]) {
 	return area;
 }
 
-// need to find each corner and define them
-
-// rectangle if:
-// all corners are 90 degrees
-
-// method 1
-// if rectangle:
-// 1) need to check if flat
-//		- 2 xs are equal
-//		- 2 ys are equal
-// 2)
-
-/*
-	1) check if flat
-		a) if flat and coords are 2 x equal and 2 y equal then rectangle
-		b) define corners
-	2) define corners
-	3) check if right angle (90deg)
-		a) if all 90 then rectangle
-		b) else return perimeter
-*/
-
-// method 2
-/*
-	1) sort each coord and find the corner
-	2) calculate length from each point
-	3) calculate distance from corner to corner (diagonal)
-	4) if diagonals are equal, lengths are equal, widths are equal then rectangle
-	5) return perimeter, and area if all are equal
-	6) return perimeter if not rectangle
-*/
-
 char* analyzeQuadrilateral(float quadrilateralPoints[RECTANGLESIDES][RECTANGLEPOINTS]) {
-	// check if quadrilateral is flat
-
-	//bool isFlat = false;
-
-	// for diagonal
-	//int xCoordinates[TOTALCOORDS] = { point1[0], point2[0], point3[0], point4[0] };
-	//int yCoordinates[TOTALCOORDS] = { point1[1], point2[1], point3[1], point4[1] };
-
-	//printf("lowest x: %d\n", findMinOfArray(xCoordinates));
-	//printf("highest x: %d\n", findMaxOfArray(xCoordinates));
-
-	//printf("lowest y: %d\n", findMinOfArray(yCoordinates));
-	//printf("highest y: %d\n", findMaxOfArray(yCoordinates));
-
-
-
-	//bool test = isQuadrilateralFlat(point1, point2, point3, point4);
-
-	//if (isRectangle()) {
-	//	analyzeRectangle();
-	//}
-	//else {
-	//	findPerimeter();
-	//}
-
 	bool isFlat = isQuadrilateralFlat(quadrilateralPoints);
 	sortPoints(quadrilateralPoints, isFlat);
-	printPoints(quadrilateralPoints);
 
 	// find lengths of side of shape shape
 	float lengths[LENGTHS];
@@ -354,23 +406,17 @@ char* analyzeQuadrilateral(float quadrilateralPoints[RECTANGLESIDES][RECTANGLEPO
 	diagonals[0] = findDiagonals(quadrilateralPoints)[0];
 	diagonals[1] = findDiagonals(quadrilateralPoints)[1];
 
-	float area = 0;
-	float perimeter = 0;
 	float perimeter = calculatePerimeter(lengths);
 
 	if (isRectangle(lengths, diagonals)) {
 		printf("Shape is a rectangle\n");
-		printf("Perimeter is %f\n", perimeter);
-		area = calculateArea(lengths);
+		//printf("Perimeter is %f\n", perimeter);
+		float area = calculateArea(lengths);
 		printf("Area is %f\n", area);
 	}
 	else {
 		printf("Shape is not a rectangle\n");
-		printf("Perimeter is %f\n", perimeter);
 	}
 
-	//printf("length 1 %f\n", lengths[0]);
-	//printf("length 2 %f\n", lengths[1]);
-	//printf("length 3 %f\n", lengths[2]);
-	//printf("length 4 %f\n", lengths[3]);
+	printf("Perimeter is %f\n", perimeter);
 } 

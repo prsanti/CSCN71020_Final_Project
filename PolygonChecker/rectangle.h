@@ -27,11 +27,13 @@ float findMaxOfArray(float points[TOTALCOORDS]);
 
 bool isQuadrilateralFlat(float quadrilateralPoints[RECTANGLESIDES][RECTANGLEPOINTS]);
 
+bool isRectangleFlat(float quadrilateralPoints[RECTANGLESIDES][RECTANGLEPOINTS]);
+
 float* findLengths(float quadrilateralPoints[RECTANGLESIDES][RECTANGLEPOINTS]);
 
 float* findDiagonals(float quadrilateralPoints[RECTANGLESIDES][RECTANGLEPOINTS]);
 
-bool isRectangle(float lengths[RECTANGLESIDES]);
+bool isRectangle(float lengths[RECTANGLESIDES], float diagonals[RECTANGLEPOINTS]);
 
 float calculatePerimeter(float lengths[RECTANGLESIDES]);
 
