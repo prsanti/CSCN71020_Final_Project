@@ -3,25 +3,26 @@
 #include <stdbool.h>
 #include "triangleSolver.h"
 
-const double PI = 3.14159265358979323846;
+const double M_PI = 3.14159265358979323846;
 
 void calculate_angles(int a, int b, int c) {
     if (a + b <= c || a + c <= b || b + c <= a) {
         printf("The input values do not form a valid triangle.\n");
         return;
     }
-    double angle1, angle2, angle3;
 
     double cosA = (a * a + b * b - c * c) / (2 * a * b);
-    double A = acos(cosA) * 180 / PI;
+    double A = acos(cosA) * 180 / M_PI;
 
     double cosB = (b * b + c * c - a * a) / (2 * b * c);
-    double B = acos(cosB) * 180 / PI;
+    double B = acos(cosB) * 180 / M_PI;
 
     double cosC = (c * c + a * a - b * b) / (2 * c * a);
-    double C = acos(cosC) * 180 / PI;
+    double C = acos(cosC) * 180 / M_PI;
 
-
+    if (A < 0) A += 360;
+    if (B < 0) B += 360;
+    if (C < 0) C += 360;
 
     printf("The angles in the triangle are: \n %.1f \n %.1f \n %.1f \n", A, B, C);
 }
