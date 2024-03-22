@@ -245,6 +245,11 @@ bool isRectangle(float lengths[RECTANGLESIDES], float diagonals[RECTANGLEPOINTS]
 		rectangle = true;
 	}
 
+	// check if any lengths and diagonals are 0 (not proper rectangle)
+	if (lengths[0] == 0 || lengths[1] == 0 || lengths[2] == 0 || lengths[3] == 0 || diagonals[0] || diagonals[1]) {
+		rectangle = false;
+	}
+
 	return rectangle;
 }
 
