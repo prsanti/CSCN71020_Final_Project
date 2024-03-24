@@ -1,6 +1,7 @@
 #include "rectangle.h"
 #include <stdio.h>
 #include <string.h>
+#define TWO 2
 
 
 // CSCN71020 - Winter 24 - Group 2
@@ -392,10 +393,8 @@ float* sortPoints(float quadrilateralPoints[RECTANGLESIDES][RECTANGLEPOINTS], bo
 
 // calculates perimeter of quadrilateral
 float calculatePerimeter(float lengths[RECTANGLESIDES]) {
-	float perimeter = 0;
-	for (int i = 0; i < RECTANGLESIDES; i++) {
-		perimeter += lengths[0];
-	}
+	
+	float perimeter = (lengths[0] + lengths[1] )* TWO;
 	return perimeter;
 }
 
